@@ -1,39 +1,47 @@
 ﻿#include <iostream>
 #include <cstring>
 
-int function(int forbidden_length, int l, int* flag)
-{
-	if (l == forbidden_length)
-	{
-		return 1;
-	}
-	*flag = l;
-	return 0;
-}
-
 using namespace std;
+
+class bad_length : public exception
+{
+public:
+	const char* what() const override
+	{
+		return "Вы ввели слово запретной длины! До свидания";
+	}
+};
+
+int function(string str, int forbidden_length)
+{
+	if (str.length() == forbidden_length) throw bad_length();
+}
 
 int main()
 {
 	system("chcp 1251");
 
-	string str = "<3";
-	int forbidden_length = -999, f = 0;
+	string str = "ldldldld";
+	int forbidden_length = -999;
 
 	cout << "Введите запретную длину: ";
 	cin >> forbidden_length;
-	cout << "Введите слово: ";
-	cin >> str;
 
-	int l = str.length();
+	do
+	{
+		cout << "Введите слово: ";
+		cin >> str;
 
-	int function_res = function(forbidden_length, l, &f);
-	if (function_res == 0)
-	{
-		cout << "Длина слова '" << str << "' равна " << l;
-	}
-	else if (function_res == 1)
-	{
-		cout << "Вы ввели слово запретной длины! До свидания.";
-	}
+		try
+		{
+			function(str, forbidden_length);
+			cout << "Длина слова '" << str << "' равна " << str.length();
+		}
+		catch (const bad_length& ex)
+		{
+			cout << ex.what() << endl;
+		}
+		cout << endl;
+
+	} while (str.length() != forbidden_length);
 }
