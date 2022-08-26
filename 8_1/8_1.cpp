@@ -15,6 +15,7 @@ public:
 int function(string str, int forbidden_length)
 {
 	if (str.length() == forbidden_length) throw bad_length();
+	return 0;
 }
 
 int main()
